@@ -3,13 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		24505297242C095200CD4E78 /* Switcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2450528D242C095200CD4E78 /* Switcher.framework */; };
 		2450529C242C095200CD4E78 /* SwitcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2450529B242C095200CD4E78 /* SwitcherTests.swift */; };
 		2450529E242C095200CD4E78 /* Switcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 24505290242C095200CD4E78 /* Switcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		245052A8242C097B00CD4E78 /* Switcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245052A7242C097B00CD4E78 /* Switcher.swift */; };
+		245052AD242C0BEC00CD4E78 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 245052AC242C0BEC00CD4E78 /* CasePaths */; };
+		245052B1242C12A900CD4E78 /* CasePathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245052B0242C12A900CD4E78 /* CasePathTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +32,8 @@
 		24505296242C095200CD4E78 /* SwitcherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwitcherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2450529B242C095200CD4E78 /* SwitcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitcherTests.swift; sourceTree = "<group>"; };
 		2450529D242C095200CD4E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		245052A7242C097B00CD4E78 /* Switcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switcher.swift; sourceTree = "<group>"; };
+		245052B0242C12A900CD4E78 /* CasePathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CasePathTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				245052AD242C0BEC00CD4E78 /* CasePaths in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +79,7 @@
 			children = (
 				24505290242C095200CD4E78 /* Switcher.h */,
 				24505291242C095200CD4E78 /* Info.plist */,
+				245052A7242C097B00CD4E78 /* Switcher.swift */,
 			);
 			path = Switcher;
 			sourceTree = "<group>";
@@ -82,6 +89,7 @@
 			children = (
 				2450529B242C095200CD4E78 /* SwitcherTests.swift */,
 				2450529D242C095200CD4E78 /* Info.plist */,
+				245052B0242C12A900CD4E78 /* CasePathTests.swift */,
 			);
 			path = SwitcherTests;
 			sourceTree = "<group>";
@@ -112,8 +120,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				245052AF242C0BF300CD4E78 /* PBXTargetDependency */,
 			);
 			name = Switcher;
+			packageProductDependencies = (
+				245052AC242C0BEC00CD4E78 /* CasePaths */,
+			);
 			productName = Switcher;
 			productReference = 2450528D242C095200CD4E78 /* Switcher.framework */;
 			productType = "com.apple.product-type.framework";
@@ -148,6 +160,7 @@
 				TargetAttributes = {
 					2450528C242C095200CD4E78 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 					24505295242C095200CD4E78 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -163,6 +176,9 @@
 				Base,
 			);
 			mainGroup = 24505283242C095200CD4E78;
+			packageReferences = (
+				245052AB242C0BEC00CD4E78 /* XCRemoteSwiftPackageReference "swift-case-paths" */,
+			);
 			productRefGroup = 2450528E242C095200CD4E78 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -195,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				245052A8242C097B00CD4E78 /* Switcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				245052B1242C12A900CD4E78 /* CasePathTests.swift in Sources */,
 				2450529C242C095200CD4E78 /* SwitcherTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +231,10 @@
 			isa = PBXTargetDependency;
 			target = 2450528C242C095200CD4E78 /* Switcher */;
 			targetProxy = 24505298242C095200CD4E78 /* PBXContainerItemProxy */;
+		};
+		245052AF242C0BF300CD4E78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 245052AE242C0BF300CD4E78 /* CasePaths */;
 		};
 /* End PBXTargetDependency section */
 
@@ -340,6 +362,7 @@
 		245052A2242C095200CD4E78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -355,6 +378,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jeppes.Switcher;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -363,6 +387,7 @@
 		245052A3242C095200CD4E78 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -386,6 +411,7 @@
 		245052A5242C095200CD4E78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SwitcherTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -403,6 +429,7 @@
 		245052A6242C095200CD4E78 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SwitcherTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -448,6 +475,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		245052AB242C0BEC00CD4E78 /* XCRemoteSwiftPackageReference "swift-case-paths" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-case-paths";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		245052AC242C0BEC00CD4E78 /* CasePaths */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 245052AB242C0BEC00CD4E78 /* XCRemoteSwiftPackageReference "swift-case-paths" */;
+			productName = CasePaths;
+		};
+		245052AE242C0BF300CD4E78 /* CasePaths */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 245052AB242C0BEC00CD4E78 /* XCRemoteSwiftPackageReference "swift-case-paths" */;
+			productName = CasePaths;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 24505284242C095200CD4E78 /* Project object */;
 }
