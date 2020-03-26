@@ -44,16 +44,20 @@ class SwitcherTests: XCTestCase {
     
     func testSwitcherMatchesArgumentsInOrder() {
         var matchedCase = false
-        _ = Switcher(1)
+        _ = Switcher(2)
+            .just(1) { _ -> Text in
+                XCTFail()
+                return Text("")
+            }
             .fallback { _ -> Text in
                 matchedCase = true
                 return Text("")
             }
             .fallback { _ -> Text in
-                matchedCase = false
                 XCTFail()
                 return Text("")
             }
+            
             .body
         
         XCTAssertTrue(matchedCase)
