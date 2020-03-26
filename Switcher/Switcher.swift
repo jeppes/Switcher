@@ -1,121 +1,141 @@
 import SwiftUI
-
-public struct Switcher<Value, Wrapping: View>: View {
-    private let value: Value
-    private let matcher: (Value) -> Bool
-    private let unwrap: (Value) -> Wrapping
-
-    fileprivate init(
-        value: Value,
-        matcher: @escaping (Value) -> Bool,
-        unwrap: @escaping (Value) -> Wrapping
-    ) {
-        self.value = value
-        self.matcher = matcher
-        self.unwrap = unwrap
-    }
-    
-    public func when<NewWrapping: View>(
-        _ newMatcher: @escaping (Value) -> Bool,
-        unwrap newUnwrap: @escaping (Value) -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>>(
-            value: value,
-            matcher: { (value: Value) -> Bool
-                in self.matcher(value) || newMatcher(value)
-            },
-            unwrap: { value in
-                self._unwrap(value: value, fallback: newUnwrap)
-            }
-        )
-    }
-    
-    @ViewBuilder
-    private func _unwrap<NewWrapping: View>(
-        value: Value,
-        fallback: @escaping (Value) -> NewWrapping
-    ) -> _ConditionalContent<Wrapping, NewWrapping> {
-        if matcher(value) {
-            unwrap(value)
-        } else {
-            fallback(value)
-        }
-    }
-    
-    public func fallback<NewWrapping: View>(
-        _ unwrap: @escaping (Value) -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        when({ _ in true }) { value in unwrap(value) }
-    }
-
-    @ViewBuilder
-    public var body: some View {
-        if matcher(value) {
-            unwrap(value)
-        } else {
-            EmptyView()
-        }
-    }
-}
-
-public extension Switcher {
-    func fallback<NewWrapping: View>(
-        _ unwrap: @escaping () -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        when({ _ in true }) { _ in unwrap() }
-    }
-    
-    func when<NewWrapping: View>(
-        _ newMatcher: @escaping (Value) -> Bool,
-        unwrap: @escaping () -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        when(newMatcher) { _ in unwrap() }
-    }
-}
-
-public extension Switcher where Wrapping == EmptyView {
-    init(value: Value) {
-        self.init(
-            value: value,
-            matcher: { _ in false },
-            unwrap: { _ in EmptyView() }
-        )
-    }
-}
-
-public extension Switcher where Value: Equatable {
-    func when<NewWrapping: View>(
-        _ value: Value,
-        unwrap: @escaping (Value) -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        when({ $0 == value }, unwrap: unwrap)
-    }
-    
-    func when<NewWrapping: View>(
-        _ value: Value,
-        unwrap: @escaping () -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        when(value) { _ in unwrap() }
-    }
-}
-
 import CasePaths
-public extension Switcher {
-    func when<NewWrapping: View, InnerValue>(
-        _ enumCase: @escaping (InnerValue) -> Value,
-        unwrap: @escaping (InnerValue) -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        let casePath = CasePath<Value, InnerValue>.case(enumCase)
-        return when({ casePath.extract(from: $0) != nil }) { value in
-            let innerValue = casePath.extract(from: value)!
-            return unwrap(innerValue)
+
+public protocol ComposableView {
+    associatedtype Value
+    associatedtype Body: View
+
+    var value: Value { get }
+    
+    func unwrap<V: View>(_ unwrap: @escaping (Value) -> V?) -> SwitcherWithView<Value, _ConditionalContent<Body?, V?>>
+}
+
+extension ComposableView {
+
+    public func fallback<V: View>(
+        body: @escaping (Value) -> V
+    ) -> SwitcherWithView<Value, _ConditionalContent<Body?, V?>> {
+        unwrap { (value: Value) -> V? in body(value) }
+    }
+
+    public func when<V: View>(
+        _ predicate: @escaping (Value) -> Bool,
+        body: @escaping (Value) -> V
+    ) -> SwitcherWithView<Value, _ConditionalContent<Body?, V?>> {
+        unwrap { (value: Value) -> V? in
+            if predicate(value) {
+                return body(value)
+            } else {
+                return nil
+            }
         }
     }
     
-    func when<NewWrapping: View, InnerValue>(
-        _ casePath: @escaping (InnerValue) -> Value,
-        unwrap: @escaping () -> NewWrapping
-    ) -> Switcher<Value, _ConditionalContent<Wrapping, NewWrapping>> {
-        when(casePath) { _ in unwrap() }
+    public func match<V: View, InnerValue>(
+        _ enumCase: @escaping (InnerValue) -> Value,
+        body: @escaping (InnerValue) -> V
+    ) -> SwitcherWithView<Value, _ConditionalContent<Body?, V?>> {
+        let casePath = CasePath<Value, InnerValue>.case(enumCase)
+        return unwrap { (value: Value) -> V? in
+            if let value = casePath.extract(from: value) {
+                return body(value)
+            } else {
+                return nil
+            }
+        }
+    }
+}
+
+public extension ComposableView where Value: Equatable {
+    func just<V: View>(
+        _ constant: Value,
+        body: @escaping (Value) -> V
+    ) -> SwitcherWithView<Value, _ConditionalContent<Body?, V?>> {
+        return unwrap { (value: Value) -> V? in
+            if value == constant {
+                return body(value)
+            } else {
+                return nil
+            }
+        }
+    }
+}
+
+public struct Switcher<Value>: ComposableView {
+    public typealias Body = EmptyView
+    
+    public let value: Value
+    private let empty: EmptyView? = nil
+    
+    public init(_ value: Value) {
+        self.value = value
+    }
+    
+    public func unwrap<V: View>(
+        _ _unwrap: @escaping (Value) -> V?
+    ) -> SwitcherWithView<Value, _ConditionalContent<EmptyView?, V?>> {
+        SwitcherWithView(switcher: self, view: merge(empty, _unwrap))
+    }
+
+    @ViewBuilder
+    internal func merge<V1: View, V2: View>(
+        _ first: V1?,
+        _ second: @escaping (Value) -> V2?
+    ) -> _ConditionalContent<V1?, V2?> {
+        if first != nil {
+            first
+        } else {
+            second(value)
+        }
+    }
+}
+
+public struct SwitcherWithView<Value, Body: View>: View, ComposableView {
+    internal let switcher: Switcher<Value>
+    public let view: Body?
+    public var value: Value { switcher.value }
+    
+    public func unwrap<NewView: View>(
+        _ _unwrap: @escaping (Value) -> NewView?
+    ) -> SwitcherWithView<Value, _ConditionalContent<Body??, NewView?>> {
+        let cond: _ConditionalContent<Body??, NewView?> = switcher.merge(view, _unwrap)
+        return SwitcherWithView<Value, _ConditionalContent<Body??, NewView?>>(switcher: switcher, view: cond)
+    }
+    
+    public var body: Body? { view }
+}
+
+let text = Case<Int, Text> { value in
+    if value == 1 {
+        return Text("\(value)")
+    }
+    return nil
+}
+struct Case<Value, V: View> {
+    let view: (Value) -> V?
+}
+enum Event: Equatable {
+    case state1(String)
+    case state2
+}
+struct V: View {
+    let event: Event
+    var body: some View {
+        Switcher(event)
+            .match(Event.state1) { string in Text(string) }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
+            .when({ $0 == Event.state2 }) { _ in Text("One") }
+            .just(Event.state2) { _ in Text("One") }
     }
 }
