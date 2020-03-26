@@ -1,6 +1,6 @@
 # Switcher
 
-The lack of `switch` statements and pattern matching can make expressing certain things in SwiftUI a bit cumbersome. `Switcher` gives you back that power. 
+The lack of `switch` statements and pattern matching can make expressing certain things in SwiftUI a bit cumbersome. `Switcher` gives you back that power.
 
 ## `enum`s and pattern matching
 
@@ -26,7 +26,7 @@ struct MyView: View {
             return View1()
         case .state2(let string):
             return View2(string)
-        case .state3(let left, let right): 
+        case .state3(let left, let right):
             return View3(left, right)
         }
     }
@@ -40,13 +40,13 @@ With `Switcher`, expressing this is a breeze:
 struct MyView: View {
     let state: ViewState
 
-    var body: some View { 
+    var body: some View {
         Switcher(value: state)
-            .when(ViewState.state1) { View1() }
-            .when(ViewState.state2) { string in
+            .just(ViewState.state1) { View1() }
+            .match(ViewState.state2) { string in
                 View2(string)
             }
-            .when(ViewState.state3) { left, right in
+            .match(ViewState.state3) { left, right in
                 View3(left, right)
             }
     }
@@ -61,14 +61,14 @@ No enum? No problem. The following types of matchers are supported too:
 
 ```swift
 Switcher(value: count)
-    // If your type is equatable, you can match againts values directly
-    .when(2) { Text("Double trouble.") }
+    // If your type is equatable, you can match againts values directly with `.just`
+    .just(2) { _ in Text("Double trouble.") }
 
     // All matchers send the value that was matched as an argument to their closure
-    .when(3) { three in Text("\(three) == 3") }
+    .just(3) { three in Text("\(three) == 3") }
 
-    // Arbitrary predicates are also possible
-    .when({ $0 > 9 && $0 < 11 }) { Text("Ten.") }
+    // Arbitrary predicates are also supported with `.when`
+    .when({ $0 > 9 && $0 < 11 }) { _ in Text("Ten.") }
 
     // Use `.fallback` to catch all remaining cases. Note: cases are matched in order, so always put `fallback` last!
     .fallback { n in Text("\(n)") }
