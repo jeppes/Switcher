@@ -41,7 +41,7 @@ struct MyView: View {
     let state: ViewState
 
     var body: some View {
-        Switcher(value: state)
+        Switcher(state)
             .just(ViewState.state1) { View1() }
             .match(ViewState.state2) { string in
                 View2(string)
@@ -60,7 +60,7 @@ Note: If your `enum` has cases with no associated values, your enum will need to
 No enum? No problem. The following types of matchers are supported too:
 
 ```swift
-Switcher(value: count)
+Switcher(count)
     // If your type is equatable, you can match againts values directly with `.just`
     .just(2) { _ in Text("Double trouble.") }
 

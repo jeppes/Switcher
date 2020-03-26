@@ -11,7 +11,6 @@ public protocol ComposableView {
 }
 
 extension ComposableView {
-
     public func fallback<V: View>(
         body: @escaping (Value) -> V
     ) -> SwitcherWithView<Value, _ConditionalContent<Body?, V?>> {
@@ -103,39 +102,4 @@ public struct SwitcherWithView<Value, Body: View>: View, ComposableView {
     }
     
     public var body: Body? { view }
-}
-
-let text = Case<Int, Text> { value in
-    if value == 1 {
-        return Text("\(value)")
-    }
-    return nil
-}
-struct Case<Value, V: View> {
-    let view: (Value) -> V?
-}
-enum Event: Equatable {
-    case state1(String)
-    case state2
-}
-struct V: View {
-    let event: Event
-    var body: some View {
-        Switcher(event)
-            .match(Event.state1) { string in Text(string) }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-            .when({ $0 == Event.state2 }) { _ in Text("One") }
-            .just(Event.state2) { _ in Text("One") }
-    }
 }
