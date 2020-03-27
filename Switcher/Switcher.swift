@@ -47,8 +47,6 @@ public struct Switcher<Value, Wrapping: View>: View {
     public var body: some View {
         if matcher(value) {
             unwrap(value)
-        } else {
-            EmptyView()
         }
     }
 }
