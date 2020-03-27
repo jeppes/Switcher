@@ -61,7 +61,7 @@ No enum? No problem. The following types of matchers are supported too:
 
 ```swift
 Switcher(count)
-    // If your type is equatable, you can match againts values directly with `.just`
+    // If your type is equatable, you can match against values directly with `.just`
     .just(2) { _ in Text("Double trouble.") }
 
     // All matchers send the value that was matched as an argument to their closure
