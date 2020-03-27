@@ -52,7 +52,7 @@ struct MyView: View {
     }
 }
 ```
-The associated values of the `enum` you define in the first argument to `when` become the arguments to the closure you pass as the second argument. 🎉
+In `.match`, the associated values of the `enum` you define in the first argument become the arguments to the closure you pass as the second argument. 🎉
 
 Note: If your `enum` has cases with no associated values, your enum will need to conform to `Equatable` in order to match on those cases.
 
