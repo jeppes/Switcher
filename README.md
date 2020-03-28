@@ -60,6 +60,7 @@ Note: If your `enum` has cases with no associated values, your enum will need to
 No enum? No problem. The following types of matchers are supported too:
 
 ```swift
+let count: Int = ...
 Switcher(count)
     // If your type is equatable, you can match against values directly with `.just`
     .just(2) { _ in Text("Double trouble.") }
