@@ -33,9 +33,8 @@ struct MyView: View {
 }
 ```
 
-Unfortunately, SwiftUI doesn't compile this unless we wrap all of these views in `AnyView`s.
+Unfortunately, SwiftUI doesn't compile this unless we wrap all of these views in `AnyView`s (which has it's own set of problems. With `Switcher`, expressing this is a breeze, and it works entirely without `AnyView`:
 
-With `Switcher`, expressing this is a breeze:
 ```swift
 struct MyView: View {
     let state: ViewState
