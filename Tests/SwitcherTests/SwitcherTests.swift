@@ -12,7 +12,7 @@ class SwitcherTests: XCTestCase {
                 return Text("")
             }
             .body
-        
+
         XCTAssertTrue(matchedCase)
     }
 
@@ -25,10 +25,10 @@ class SwitcherTests: XCTestCase {
                 return Text("")
             }
             .body
-        
+
         XCTAssertTrue(matchedCase)
     }
-    
+
     func testSwitcherWithFallback() {
         var matchedCase = false
         _ = Switcher(1)
@@ -38,10 +38,10 @@ class SwitcherTests: XCTestCase {
                 return Text("")
             }
             .body
-        
+
         XCTAssertTrue(matchedCase)
     }
-    
+
     func testSwitcherMatchesArgumentsInOrder() {
         var matchedCase = false
         _ = Switcher(2)
@@ -57,9 +57,9 @@ class SwitcherTests: XCTestCase {
                 XCTFail()
                 return Text("")
             }
-            
+
             .body
-        
+
         XCTAssertTrue(matchedCase)
     }
 }

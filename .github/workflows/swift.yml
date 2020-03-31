@@ -14,4 +14,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build & Test
-      run: xcodebuild test -project Switcher.xcodeproj -scheme SwitcherTests
+      run: swift test --parallel

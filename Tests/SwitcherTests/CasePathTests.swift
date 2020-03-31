@@ -20,7 +20,7 @@ final class CasePathTests: XCTestCase {
 
         XCTAssertTrue(matchedCase)
     }
-    
+
     func testEnumWithOneAssociatedValue() {
         var matchedCase = false
         _ = Switcher(Cases.withString("a"))
@@ -30,7 +30,7 @@ final class CasePathTests: XCTestCase {
                 return Text("With Nothing")
             }
             .body
-        
+
         XCTAssertTrue(matchedCase)
     }
 
@@ -44,7 +44,7 @@ final class CasePathTests: XCTestCase {
                 return Text("With Nothing")
             }
             .body
-        
+
         XCTAssertTrue(matchedCase)
     }
 }
