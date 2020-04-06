@@ -57,7 +57,7 @@ Note: If your `enum` has cases with no associated values, your enum will need to
 
 ## `if let` assignments
 
-Unwrapping `Optional`s with `if let something = something { ... }` is common practice in Swift. Switcher brings this functionality to SwiftUI with the same syntax as before:
+Unwrapping `Optional`s with `if let something = something { ... }` is common practice in Swift. Switcher brings this functionality to SwiftUI:
 
 ```swift
 struct IfCaseLetDemo: View {
