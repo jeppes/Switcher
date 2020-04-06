@@ -1,6 +1,6 @@
 # Switcher
 
-The lack of `switch` statements and pattern matching can make expressing certain things in SwiftUI a bit cumbersome. `Switcher` gives you back that power.
+The lack of `switch` statements, pattern matching, and `if let x = x` can make expressing certain things in SwiftUI a bit cumbersome. `Switcher` gives you back that power.
 
 ## `enum`s and pattern matching
 
@@ -54,6 +54,30 @@ struct MyView: View {
 In `.match`, the associated values of the `enum` you define in the first argument become the arguments to the closure you pass as the second argument. 🎉
 
 Note: If your `enum` has cases with no associated values, your enum will need to conform to `Equatable` in order to match on those cases.
+
+## `if let` assignments
+
+Unwrapping `Optional`s with `if let something = something { ... }` is common practice in Swift. Switcher brings this functionality to SwiftUI with the same syntax as before:
+
+```swift
+struct IfCaseLetDemo: View {
+    // We only want to draw something if this field is not `nil`
+    let optional: String?
+
+    var body: some View {
+        Switcher(optional)
+            // `if let` is just the same as `match` on `Optional`'s `.some` case:
+            .match(Optional.some) { unwrappedOptional in
+                Text(unwrappedOptional)
+            }
+            // Optional fallback. You can leave this out and nothing will be drawn.
+            .fallback { _ in
+                Text("Fallback text here")
+
+            }
+    }
+}
+```
 
 ## Non-`enum`s
 No enum? No problem. The following types of matchers are supported too:
