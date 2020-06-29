@@ -1,5 +1,7 @@
 # Switcher
 
+UPDATE: Support for `switch` statements and pattern matching was added in Swift 5.3, so this project is no longer needed.
+
 The lack of `switch` statements, pattern matching, and `if let x = x` can make expressing certain things in SwiftUI a bit cumbersome. `Switcher` gives you back that power.
 
 ## `enum`s and pattern matching
